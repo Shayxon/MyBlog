@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Post
+from .models import Post, Email
 
 @admin.register(Post)
 class AdminPost(admin.ModelAdmin):
@@ -8,3 +8,5 @@ class AdminPost(admin.ModelAdmin):
     raw_id_fields = ['author']
     prepopulated_fields = {'slug': ('title',)}
     ordering = ['-publish']
+
+admin.site.register(Email)

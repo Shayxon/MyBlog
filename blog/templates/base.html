@@ -21,11 +21,11 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="{% static 'css/theme-1.css' %}">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
 
 </head>
 
 <body>
-
     <header class="header text-center">
         <h1 class="blog-name pt-lg-4 mb-0"><a class="no-text-decoration" href="{% url 'home' %}">Shayxon's Blog</a></h1>
 
@@ -38,23 +38,32 @@
 
             <div id="navigation" class="collapse navbar-collapse flex-column">
                 <div class="profile-section pt-3 pt-lg-0">
-                    <img class="profile-image mb-3 rounded-circle mx-auto" src="{% static 'images/profile1.jpg' %}" alt="image">
+                    <img class="profile-image mb-3 rounded-circle mx-auto" src="{% static 'images/profile1.jpg' %}"
+                        alt="image">
 
-                    <div class="bio mb-3">Hi, my name is Shayxon Toirjonov. Briefly introduce yourself here. You can also
-                        provide a link to the about page.<br><a href="{% url 'about' %}">Find out more about me</a></div>
+                    <div class="bio mb-3">Hi, my name is Shayxon Toirjonov. Briefly introduce yourself here. You can
+                        also
+                        provide a link to the about page.<br><a href="{% url 'about' %}">Find out more about me</a>
+                    </div>
                     <!--//bio-->
                     <ul class="social-list list-inline py-3 mx-auto">
-                        <li class="list-inline-item"><a href="https://www.linkedin.com/in/shayxon-toirjonov-7312792aa/"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
-                        <li class="list-inline-item"><a href="https://github.com/Shayxon"><i class="fab fa-github-alt fa-fw"></i></a></li>
-                        <li class="list-inline-item"><a href="https://www.instagram.com/shayxon77/"><i class="fab fa-instagram fa-fw"></i></a></li>
-                        <li class="list-inline-item"><a href="https://t.me/shayxon"><i class="fab fa-telegram fa-fw"></i></a></li>
+                        <li class="list-inline-item"><a
+                                href="https://www.linkedin.com/in/shayxon-toirjonov-7312792aa/"><i
+                                    class="fab fa-linkedin-in fa-fw"></i></a></li>
+                        <li class="list-inline-item"><a href="https://github.com/Shayxon"><i
+                                    class="fab fa-github-alt fa-fw"></i></a></li>
+                        <li class="list-inline-item"><a href="https://www.instagram.com/shayxon77/"><i
+                                    class="fab fa-instagram fa-fw"></i></a></li>
+                        <li class="list-inline-item"><a href="https://t.me/shayxon"><i
+                                    class="fab fa-telegram fa-fw"></i></a></li>
                     </ul><!--//social-list-->
                     <hr>
                 </div><!--//profile-section-->
 
                 <ul class="navbar-nav flex-column text-start">
                     <li class="nav-item">
-                        <a class="nav-link active" href="{% url 'home' %}"><i class="fas fa-home fa-fw me-2"></i>Blog Home
+                        <a class="nav-link active" href="{% url 'home' %}"><i class="fas fa-home fa-fw me-2"></i>Blog
+                            Home
                             <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
@@ -68,19 +77,28 @@
             </div>
         </nav>
     </header>
-
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li class="{{ message.tags }}">
+            {{ message|safe }}
+            <a href="#" class="close">x</a>
+        </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
     {% block content %}
-        
+
     {% endblock %}
 
     <footer class="footer text-center py-2 theme-bg-dark">
 
-		<!--/* This template is free as long as you keep the footer attribution link. If you'd like to use the template without the attribution link, you can buy the commercial license via our website: themes.3rdwavemedia.com Thank you for your support. :) */-->
-		<small class="copyright">Designed with <span class="sr-only">love</span><i class="fas fa-heart"
-				style="color: #fb866a;"></i> by <a href="https://themes.3rdwavemedia.com" target="_blank">Xiaoying
-				Riley</a></small>
+        <!--/* This template is free as long as you keep the footer attribution link. If you'd like to use the template without the attribution link, you can buy the commercial license via our website: themes.3rdwavemedia.com Thank you for your support. :) */-->
+        <small class="copyright">Designed with <span class="sr-only">love</span><i class="fas fa-heart"
+                style="color: #fb866a;"></i> by <a href="https://themes.3rdwavemedia.com" target="_blank">Xiaoying
+                Riley</a></small>
 
-	</footer>
+    </footer>
 
     <!-- Javascript -->
     <script src="{% static 'plugins/popper.min.js' %}"></script>
@@ -90,8 +108,24 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/highlight.min.js"></script>
 
     <!-- Custom JS -->
-    <script src="{% static 'js/blog.js' %}"></script> 
+    <script src="{% static 'js/blog.js' %}"></script>
 
+    <script>
+        document.querySelectorAll('.close').forEach(function(closeButton) {
+            closeButton.addEventListener('click', function(event) {
+                event.preventDefault(); // Prevent the default link behavior
+                this.parentNode.remove(); // Remove the parent <li> element when the close button is clicked
+            });
+        });
+    
+        // Automatically remove messages after 4 seconds
+        setTimeout(function() {
+            var messages = document.querySelectorAll('.messages li');
+            messages.forEach(function(message) {
+                message.remove();
+            });
+        }, 4000);
+    </script>
 </body>
 
 </html>
