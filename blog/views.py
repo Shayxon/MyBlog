@@ -4,6 +4,8 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.decorators.http import require_POST
 from .forms import EmailForm
 from django.contrib import messages
+from django.core.mail import send_mail
+from django.conf import settings
 
 def home_view(request):
     email_form = EmailForm()
@@ -34,8 +36,16 @@ def subscribe(request):
     form = EmailForm(request.POST)
     if form.is_valid():
         email = form.cleaned_data['email']
-        if email not in emails:
+        if email not in emails and email != settings.EMAIL_HOST_USER:
             form.save()
+            send_mail('👋 Welcome to Shayxon\'s Blog!',
+                        "Hey there! "
+                        "Thanks for joining My Blog! I'm pumped to have you with us. Here, we're all about making coding fun and easy to understand. "
+                        "Whether you're just starting out or a seasoned pro, you'll find helpful tips, cool projects, and plenty of support from our community. "
+                        "Feel free to dive into our posts, ask questions, and share your own coding adventures. Let's learn and grow together! "
+                        "Happy coding! "
+                        "Founder, Shayxon Toirjonov"
+                      , 'settings.EMAIL_HOST_USER', [email], fail_silently=True)
             messages.success(request, "You subscribed succesfully!")
         else:
             messages.error(request, "Email already exists!")

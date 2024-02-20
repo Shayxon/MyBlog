@@ -4,6 +4,8 @@ from django_ckeditor_5.fields import CKEditor5Field
 from django.utils import timezone
 from taggit.managers import TaggableManager
 from django.urls import reverse
+from django.core.mail import send_mass_mail
+from django.conf import settings
 
 class PublishedManager(models.Manager):
     def get_queryset(self) -> models.QuerySet:
@@ -40,6 +42,22 @@ class Post(models.Model):
 
     def get_absolute_url(self):
         return reverse('blog_post', args=[self.publish.year, self.publish.month, self.publish.day, self.slug])
+    
+    def save(self, *args, **kwargs):
+        if self.pk and self.status == self.Status.PUBLISHED:
+            emails = Email.objects.all()
+            emails = emails.values_list('email', flat=True)
+            messages = [
+                (
+                f"New Post: {self.title}",
+                f"You can read the post here: localhost:8000{self.get_absolute_url()}",
+                'settings.EMAIL_HOST_USER',
+                emails
+                )
+            ]
+
+            send_mass_mail(messages, fail_silently=False)
+        return super().save(*args, **kwargs)
 
 class Email(models.Model):
     email = models.EmailField()
