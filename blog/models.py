@@ -56,7 +56,7 @@ class Post(models.Model):
                 )
             ]
 
-            send_mass_mail(messages, fail_silently=False)
+            send_mass_mail(messages, fail_silently=True)
         return super().save(*args, **kwargs)
 
 class Email(models.Model):
