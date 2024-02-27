@@ -80,13 +80,17 @@ Blog Posts
 					csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
 				},
 				success: function (response) {
-					$('#comments-container').append(`<div class='comment'>
-														<h3>${name}</h3>
-														<p>${comment}</p>
-													</div>`)
+					if (response.status == 200){
+						$('#comment-form')[0].reset();
+						$('#comments-container').append(`<div class='comment'>
+															<h3>${name}</h3>
+															<p>${comment}</p>
+														</div>`)
+					} else {
+						alert('Fill all fields correctly!')
+					}									
 				}
 			});
-			$('#comment-form')[0].reset();
 		});
 	});
 </script>
