@@ -21,7 +21,10 @@
 
     <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="{% static 'css/theme-1.css' %}">
-    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <!-- Jquery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
 </head>
 
@@ -106,9 +109,10 @@
 
     <!-- Page Specific JS -->
     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/highlight.min.js"></script>
-
+    
     <!-- Custom JS -->
     <script src="{% static 'js/blog.js' %}"></script>
+
 
     <script>
         document.querySelectorAll('.close').forEach(function(closeButton) {
@@ -125,6 +129,8 @@
                 message.remove();
             });
         }, 4000);
+
+
     </script>
 </body>
 

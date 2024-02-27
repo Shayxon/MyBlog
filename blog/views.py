@@ -1,11 +1,12 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Post, Email
+from .models import Post, Email, Comment
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.decorators.http import require_POST
-from .forms import EmailForm
+from .forms import EmailForm, CommentForm
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.conf import settings
+from django.http import JsonResponse
 
 def home_view(request):
     email_form = EmailForm()
@@ -23,7 +24,9 @@ def home_view(request):
 
 def blog_post(request, year, month, day, post):
     post = get_object_or_404(Post, status=Post.Status.PUBLISHED, publish__year = year, publish__month = month, publish__day = day, slug = post)
-    return render(request, 'blog/blog-post.html', {'post':post})
+    form = CommentForm()
+    comments = Comment.objects.filter(post = post)
+    return render(request, 'blog/blog-post.html', {'post':post, 'form':form, 'comments':comments})
 
 def about(request):
     email_form = EmailForm()
@@ -50,3 +53,17 @@ def subscribe(request):
         else:
             messages.error(request, "Email already exists!")
     return redirect('home')
+
+@require_POST
+def comment(request, post_id):
+    form = CommentForm(request.POST)
+    post = get_object_or_404(Post, id=post_id, status=Post.Status.PUBLISHED)
+
+    if form.is_valid():
+        if post:
+            new_comment = form.save(commit=False)
+            new_comment.post = post
+            new_comment.save()
+
+            return JsonResponse({'status':200})
+    return JsonResponse({'status': 400})
