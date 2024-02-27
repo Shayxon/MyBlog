@@ -65,3 +65,12 @@ class Email(models.Model):
 
     def __str__(self) -> str:
         return self.email
+    
+class Comment(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
+    name = models.CharField(max_length=150, blank=False, null=False)
+    email = models.EmailField(blank=False, null=False)    
+    comment = models.TextField(blank=False, null=False)
+
+    def __str__(self) -> str:
+        return self.name
