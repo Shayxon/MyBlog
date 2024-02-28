@@ -36,7 +36,7 @@ Blog
 					<div class="col">
 						<h3 class="title mb-1"><a class="text-link" href="{{ post.get_absolute_url }}">{{post.title}}</a></h3>
 						<div class="meta mb-1"><span class="date">{{post.publish}}</span>
-							<span class="comment"><a class="text-link" href="#">8 comments</a></span>
+							<span class="comment"><p class="text-link">{{post.comments.count}} comment{{post.comments.count|pluralize}}</p></span>
 						</div>
 						<div class="intro">{% with stripped_content=post.body|striptags %}
 							{{ stripped_content|slice:":250"|safe }}
