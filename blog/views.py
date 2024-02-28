@@ -7,6 +7,7 @@ from django.contrib import messages
 from django.core.mail import send_mail
 from django.conf import settings
 from django.http import JsonResponse
+from django.db.models import Count
 
 def home_view(request):
     email_form = EmailForm()
@@ -26,7 +27,10 @@ def blog_post(request, year, month, day, post):
     post = get_object_or_404(Post, status=Post.Status.PUBLISHED, publish__year = year, publish__month = month, publish__day = day, slug = post)
     form = CommentForm()
     comments = Comment.objects.filter(post = post)
-    return render(request, 'blog/blog-post.html', {'post':post, 'form':form, 'comments':comments})
+    tags = post.tags.values_list('id', flat=True)
+    similar_posts = Post.published.filter(tags__in=tags).exclude(id=post.id)
+    similar_posts = similar_posts.annotate(count=Count('tags')).order_by('-count', '-publish')[:4]
+    return render(request, 'blog/blog-post.html', {'post':post, 'form':form, 'comments':comments, 'similar_posts':similar_posts})
 
 def about(request):
     email_form = EmailForm()

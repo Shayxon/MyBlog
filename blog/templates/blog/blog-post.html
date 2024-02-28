@@ -29,6 +29,17 @@ Blog Posts
 			</div><!--//blog-comments-section-->
 
 		</div><!--//container-->
+		<br><br>
+		<div class="similar-posts">
+			<h2>Similar Posts</h2>
+			<ul>
+				{% for post in similar_posts %}
+					<li><a href="{{ post.get_absolute_url }}">{{post.title}}</a></li>
+					{%empty%}
+					<h4>There is no similar posts yet!</h4>
+				{% endfor %}
+			</ul>
+		</div>
 		<br><br><br>
 		<h2 style="text-align: center; margin-bottom: 20px; font-size: 24px; color: #333;">Leave a Comment</h2>
 
